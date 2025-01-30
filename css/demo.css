@@ -33,8 +33,9 @@ a:hover, a:focus {
 	padding: 3em 1em;
 	color: #fff;
 	text-align: center;
-	background: url(../img/bgheader.jpg) no-repeat center center;
+	background: url(../img/const31.jpg) no-repeat center center;
 	background-size: cover;
+	background-position: center 40%;
 }
 
 .codrops-header h1 {

@@ -50,7 +50,7 @@ body {
 .book {
     position: relative;
     margin: 0 auto;
-    width: 180px;
+    width: 330px;
     height: 260px;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
@@ -484,23 +484,30 @@ body {
 .no-csstransforms3d .book[data-book="book-1"],
 .no-js .book[data-book="book-1"],
 .book[data-book="book-1"] .front {
-    background: url(../img/cover1.svg);
-    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(211, 211, 211, 0.1) 5%, rgba(255, 255, 255, 0.15) 5%, rgba(255, 255, 255, 0.1) 9%, rgba(0, 0, 0, 0.01) 100%), url(../img/cover1.svg), #009bdb;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.1) 0%, rgba(211, 211, 211, 0.1) 5%, rgba(255, 255, 255, 0.15) 5%, rgba(255, 255, 255, 0.1) 9%, rgba(0, 0, 0, 0.01) 100%), url(../img/cover1.svg), #009bdb;
+    background: url(../img/cover1.png);
+    background-size: contain !important;  /* Ensures the full image is visible */
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(211, 211, 211, 0.1) 5%, rgba(255, 255, 255, 0.15) 5%, rgba(255, 255, 255, 0.1) 9%, rgba(0, 0, 0, 0.01) 100%), url(../img/cover1.png), #009bdb;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.1) 0%, rgba(211, 211, 211, 0.1) 5%, rgba(255, 255, 255, 0.15) 5%, rgba(255, 255, 255, 0.1) 9%, rgba(0, 0, 0, 0.01) 100%), url(../img/cover1.png), #009bdb;
 }
 
 .book[data-book="book-1"] .inner { border-color: #009bdb }
 
 .book[data-book="book-1"] .cover::before {
-    background: url(../img/spine1.svg);
-    background: -webkit-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.01) 1%, rgba(0, 0, 0, 0.1) 50%, transparent 100%), url(../img/spine1.svg), #009bdb;
-    background: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.01) 1%, rgba(0, 0, 0, 0.1) 50%, transparent 100%), url(../img/spine1.svg), #009bdb;
+    background: url(../img/spine1.png);
+    background: -webkit-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.01) 1%, rgba(0, 0, 0, 0.1) 50%, transparent 100%), url(../img/spine1.png), #e7a006;
+    background: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.01) 1%, rgba(0, 0, 0, 0.1) 50%, transparent 100%), url(../img/spine1.png), #e7a006;
+    background-size: contain !important;  /* Ensures the full image is visible */
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+
 }
 
 .no-csstransforms3d .book[data-book="book-2"],
 .no-js .book[data-book="book-2"],
 .book[data-book="book-2"] .front {
-    background: url(../img/cover2.svg);
+    background: url(../img/cover1.png);
     background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(211, 211, 211, 0.1) 5%, rgba(255, 255, 255, 0.15) 5%, rgba(255, 255, 255, 0.1) 9%, rgba(0, 0, 0, 0.01) 100%), url(../img/cover2.svg), #f6a7a5;
     background: linear-gradient(to right, rgba(0, 0, 0, 0.1) 0%, rgba(211, 211, 211, 0.1) 5%, rgba(255, 255, 255, 0.15) 5%, rgba(255, 255, 255, 0.1) 9%, rgba(0, 0, 0, 0.01) 100%), url(../img/cover2.svg), #f6a7a5;
 }
