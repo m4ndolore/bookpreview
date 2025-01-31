@@ -59,15 +59,6 @@
 		} else {
 			console.log("✅ book-viewer found in DOM!");
 		}
-		// console.log("🚀 _open() function is running!");
-    
-		// // docscroll = scrollY();
-		
-		// // classie.add( this.el, 'open' );
-		// // classie.add( this.bbWrapper, 'show' );
-		
-		// let totalPages = 0;
-		// let pdfDoc = null;
 
 		if (typeof pdfjsLib === "undefined") {
 			console.error("❌ PDF.js is not loaded!");
@@ -102,34 +93,6 @@
 		}
 	
 		bookPreview.innerHTML = ""; // Clear previous pages
-
-		// let bookId = this.book.getAttribute("data-book");
-		// let pdfUrl = pdfFiles[bookId] || "books/htsg_lulu.pdf"; // Load the right PDF
-		// console.log("📖 Loading PDF:", pdfUrl);
-
-		// let bookWrapper = document.getElementById("book-viewer"); // ✅ New single container
-    	// let bookPreview = bookWrapper.querySelector(".bb-bookblock");
-			
-		// // Clear existing content (to avoid duplicate pages)
-		// bookPreview.innerHTML = "<div class='bb-item'>Loading page...</div>"; // Add temporary content
-
-		// bookWrapper.style.display = "block"; // ✅ Show the viewer when a book is opened
-
-		// ✅ Ensure the viewer is visible
-		// bookWrapper.style.display = "flex"; // ✅ Use flex for centering
-		// bookWrapper.style.justifyContent = "center";
-		// bookWrapper.style.alignItems = "center";
-
-		// bookWrapper.style.display = "flex"; 
-		// bookWrapper.style.position = "fixed"; 
-		// bookWrapper.style.top = "50%";
-		// bookWrapper.style.left = "50%";
-		// bookWrapper.style.transform = "translate(-50%, -50%)";
-		// bookWrapper.style.zIndex = "1000"; // Ensure it's on top
-		// bookWrapper.style.background = "#ffffff"; // Add background color
-		// bookWrapper.style.padding = "20px"; 
-		// console.log("✅ Forced book-viewer to appear!");
-    	// ✅ Ensure book-viewer is visible
 		bookWrapper.style.display = "block";
 		bookWrapper.style.visibility = "visible";
 		bookWrapper.style.opacity = "1";
@@ -237,29 +200,6 @@
 
 			bookPreview.innerHTML = ""; // Clear previous pages
 
-			// pdfDoc.getPage(pageNumber).then(page => {
-			// 	let scale = 1.5;
-			// 	let viewport = page.getViewport({ scale });
-		
-			// 	let canvas = document.createElement("canvas");
-			// 	let context = canvas.getContext("2d", { willReadFrequently: true });
-			// 	canvas.width = viewport.width;
-			// 	canvas.height = viewport.height;
-		
-			// 	let renderContext = {
-			// 		canvasContext: context,
-			// 		viewport: viewport
-			// 	};
-		
-			// 	page.render(renderContext).promise.then(() => {
-			// 		console.log(`✅ Page ${pageNumber} rendered successfully!`);
-			// 		bookPreview.appendChild(canvas);
-			// 	}).catch(error => {
-			// 		console.error("❌ Error rendering page:", error);
-			// 	});
-			// }).catch(error => {
-			// 	console.error("❌ Error fetching page:", error);
-			// });
 			// Create a container for the spread
 			let spreadContainer = document.createElement("div");
 			spreadContainer.style.display = "flex"; // Side-by-side layout
@@ -278,7 +218,7 @@
 		
 			pagesToRender.forEach((pageNum) => {
 				pdfDoc.getPage(pageNum).then(page => {
-					let scale = 1.5;
+					let scale = 2;
 					let viewport = page.getViewport({ scale });
 		
 					let canvas = document.createElement("canvas");
@@ -301,32 +241,7 @@
 					console.error("❌ Error fetching page:", error);
 				});
 			});
-			 
-			// pagesToRender.forEach((pageNum) => {
-			// 	pdfDoc.getPage(pageNum).then(page => {
-			// 		let scale = 1.5;
-			// 		let viewport = page.getViewport({ scale: scale });
 		
-			// 		let canvas = document.createElement("canvas");
-			// 		let context = canvas.getContext("2d", { willReadFrequently: true });
-			// 		canvas.width = viewport.width;
-			// 		canvas.height = viewport.height;
-		
-			// 		let renderContext = {
-			// 			canvasContext: context,
-			// 			viewport: viewport
-			// 		};
-		
-			// 		page.render(renderContext).promise.then(() => {
-			// 			console.log(`✅ Page ${pageNum} rendered and added to spread.`);
-			// 			spreadContainer.appendChild(canvas);
-			// 		}).catch(error => {
-			// 			console.error("❌ Error rendering page:", error);
-			// 		});
-			// 	}).catch(error => {
-			// 		console.error("❌ Error fetching page:", error);
-			// 	});
-			// });
 		}
 	
 		window.addEventListener("load", function() {
@@ -363,34 +278,6 @@
 			});
 		}, 500);
 			
-		// // Navigation buttons (find existing or create them if missing)
-		// let nextButton = this.bbWrapper.querySelector(".bb-nav-next");
-		// let prevButton = this.bbWrapper.querySelector(".bb-nav-prev");
-	
-		// if (!nextButton || !prevButton) {
-		// 	console.error("❌ Navigation buttons not found!");
-		// 	return;
-		// }
-	
-		// nextButton.addEventListener("click", function(ev) {
-		// 	ev.preventDefault();
-		// 	let step = currentPage === 1 ? 1 : 2; // Move 1 page for first page, then 2 pages at a time
-		// 	if (currentPage + step <= totalPages) {
-		// 		currentPage += step;
-		// 		console.log(`➡️ Next Page: ${currentPage}`);
-		// 		renderPage(currentPage);
-		// 	}
-		// });
-	
-		// prevButton.addEventListener("click", function(ev) {
-		// 	ev.preventDefault();
-		// 	let step = currentPage === 3 ? 1 : 2; // If returning to page 1, move back 1 page only
-		// 	if (currentPage - step >= 1) {
-		// 		currentPage -= step;
-		// 		console.log(`⬅️ Previous Page: ${currentPage}`);
-		// 		renderPage(currentPage);
-		// 	}
-		// });
 	}
 	
 	Book.prototype._layout = function() {
@@ -454,19 +341,7 @@
 		}
 
 		if( this.bb ) {
-			// this.ctrls.querySelector( 'a:nth-child(1)' ).addEventListener( 'click', function( ev ) { ev.preventDefault(); self._open(); } );
-			// let lookInsideBtn = this.ctrls.querySelector('a[href="#"]');
-			// if (lookInsideBtn) {
-			// 	lookInsideBtn.addEventListener("click", function(ev) {
-			// 		ev.preventDefault();
-			// 		console.log("🚀 Click event permanently attached!");
-			// 		self._open();
-			// 	});
-			// } else {
-			// 	console.error("❌ Look Inside button not found at script runtime!");
-			// }
 			
-
 			this.ctrlBBClose.addEventListener( 'click', function( ev ) { ev.preventDefault(); self._close(); } );
 			this.ctrlBBNext.addEventListener( 'click', function( ev ) { ev.preventDefault(); self._nextPage(); } );
 			this.ctrlBBPrev.addEventListener( 'click', function( ev ) { ev.preventDefault(); self._prevPage(); } );
@@ -477,28 +352,7 @@
 			this.closeDetailsCtrl.addEventListener( 'click', function() { self._hideDetails(); } );
 		}
 	}
-
-	// Book.prototype._open = function() {
-	// 	docscroll = scrollY();
-		
-	// 	classie.add( this.el, 'open' );
-	// 	classie.add( this.bbWrapper, 'show' );
-
-	// 	var self = this,
-	// 		onOpenBookEndFn = function( ev ) {
-	// 			this.removeEventListener( animEndEventName, onOpenBookEndFn );
-	// 			document.body.scrollTop = document.documentElement.scrollTop = 0;
-	// 			classie.add( scrollWrap, 'hide-overflow' );
-	// 		};
-
-	// 	if( supportAnimations ) {
-	// 		this.bbWrapper.addEventListener( animEndEventName, onOpenBookEndFn );
-	// 	}
-	// 	else {
-	// 		onOpenBookEndFn.call();
-	// 	}
-	// }
-
+	
 	Book.prototype._close = function() {
 		classie.remove( scrollWrap, 'hide-overflow' );
 		setTimeout( function() { document.body.scrollTop = document.documentElement.scrollTop = docscroll; }, 25 );
