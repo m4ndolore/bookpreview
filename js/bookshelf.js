@@ -158,7 +158,17 @@
 		setTimeout(() => {
 			let nextButton = bookWrapper.querySelector(".bb-nav-next");
 			let prevButton = bookWrapper.querySelector(".bb-nav-prev");
-
+			let closeButton = document.querySelector(".bb-nav-close");
+			if (closeButton) {
+				closeButton.addEventListener("click", function(ev) {
+					ev.preventDefault();
+					console.log("❌ Close button clicked! Hiding book viewer.");
+					document.getElementById("book-viewer").style.display = "none";
+				});
+				console.log("✅ Close button event listener added!");
+			} else {
+				console.error("❌ Close button NOT found!");
+			}
 			if (nextButton) {
 				nextButton.replaceWith(nextButton.cloneNode(true)); // Remove duplicate events
 				nextButton = bookWrapper.querySelector(".bb-nav-next");
@@ -202,7 +212,7 @@
 			console.log("✅ PDF Loaded Successfully:", pdfUrl);
 			pdfDoc = pdf;
 			totalPages = pdf.numPages;
-			currentPage = 8; // Start from the first page
+			currentPage = 1; // Start from the first page
 			renderPage(currentPage);
 		}).catch(error => {
 			console.error("❌ PDF failed to load!", error);
@@ -210,18 +220,14 @@
 	
 
 		function renderPage(pageNumber) {
+			console.log(`🛠 Rendering pages ${pageNumber} and ${pageNumber + 1}...`);
+
 			if (!pdfDoc) {
 				console.error("❌ PDF document is not loaded!");
 				return;
 			}
 			
 			console.log(`🛠 Attempting to render page: ${pageNumber}`);
-
-			let pagesToRender = [pageNumber]; // Start with the first page
-
-			if (pageNumber > 1 && pageNumber + 1 <= totalPages) {
-				pagesToRender.push(pageNumber + 1); // Add the next page for a two-page spread
-			}
 
 			let bookPreview = document.querySelector(".bb-bookblock"); // ✅ Correct container
 			if (!bookPreview) {
@@ -231,39 +237,71 @@
 
 			bookPreview.innerHTML = ""; // Clear previous pages
 
-			pdfDoc.getPage(pageNumber).then(page => {
-				let scale = 1.5;
-				let viewport = page.getViewport({ scale });
+			// pdfDoc.getPage(pageNumber).then(page => {
+			// 	let scale = 1.5;
+			// 	let viewport = page.getViewport({ scale });
 		
-				let canvas = document.createElement("canvas");
-				let context = canvas.getContext("2d", { willReadFrequently: true });
-				canvas.width = viewport.width;
-				canvas.height = viewport.height;
+			// 	let canvas = document.createElement("canvas");
+			// 	let context = canvas.getContext("2d", { willReadFrequently: true });
+			// 	canvas.width = viewport.width;
+			// 	canvas.height = viewport.height;
 		
-				let renderContext = {
-					canvasContext: context,
-					viewport: viewport
-				};
+			// 	let renderContext = {
+			// 		canvasContext: context,
+			// 		viewport: viewport
+			// 	};
 		
-				page.render(renderContext).promise.then(() => {
-					console.log(`✅ Page ${pageNumber} rendered successfully!`);
-					bookPreview.appendChild(canvas);
-				}).catch(error => {
-					console.error("❌ Error rendering page:", error);
-				});
-			}).catch(error => {
-				console.error("❌ Error fetching page:", error);
-			});
-			// // Create a container for the spread
-			// let spreadContainer = document.createElement("div");
-			// spreadContainer.style.display = "flex"; // Side-by-side layout
-			// spreadContainer.style.justifyContent = "center";
-			// spreadContainer.style.alignItems = "center";
-			// spreadContainer.style.gap = "10px"; // Space between pages
-			// spreadContainer.style.width = "100%";
+			// 	page.render(renderContext).promise.then(() => {
+			// 		console.log(`✅ Page ${pageNumber} rendered successfully!`);
+			// 		bookPreview.appendChild(canvas);
+			// 	}).catch(error => {
+			// 		console.error("❌ Error rendering page:", error);
+			// 	});
+			// }).catch(error => {
+			// 	console.error("❌ Error fetching page:", error);
+			// });
+			// Create a container for the spread
+			let spreadContainer = document.createElement("div");
+			spreadContainer.style.display = "flex"; // Side-by-side layout
+			spreadContainer.style.justifyContent = "center";
+			spreadContainer.style.alignItems = "center";
+			spreadContainer.style.gap = "10px"; // Space between pages
+			spreadContainer.style.width = "100%";
 
-    		// bookPreview.appendChild(spreadContainer); // ✅ Ensure it’s added INSIDE `.bb-bookblock`
+    		bookPreview.appendChild(spreadContainer); // ✅ Ensure it’s added INSIDE `.bb-bookblock`
 			
+			 // ✅ Ensure pages render side by side
+			let pagesToRender = [pageNumber]; // Always render at least one page
+			if (pageNumber + 1 <= totalPages) {
+				pagesToRender.push(pageNumber + 1); // Add the next page for a two-page spread
+			}
+		
+			pagesToRender.forEach((pageNum) => {
+				pdfDoc.getPage(pageNum).then(page => {
+					let scale = 1.5;
+					let viewport = page.getViewport({ scale });
+		
+					let canvas = document.createElement("canvas");
+					let context = canvas.getContext("2d", { willReadFrequently: true });
+					canvas.width = viewport.width;
+					canvas.height = viewport.height;
+		
+					let renderContext = {
+						canvasContext: context,
+						viewport: viewport
+					};
+		
+					page.render(renderContext).promise.then(() => {
+						console.log(`✅ Page ${pageNum} rendered!`);
+						spreadContainer.appendChild(canvas);
+					}).catch(error => {
+						console.error("❌ Error rendering page:", error);
+					});
+				}).catch(error => {
+					console.error("❌ Error fetching page:", error);
+				});
+			});
+			 
 			// pagesToRender.forEach((pageNum) => {
 			// 	pdfDoc.getPage(pageNum).then(page => {
 			// 		let scale = 1.5;
