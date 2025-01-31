@@ -45,7 +45,316 @@
 		}
 		this._initEvents();
 	}
+	let pdfFiles = {
+		"book-1": "books/htsg_lulu.pdf",
+		// "book-2": "books/another-book.pdf"
+	};
 
+	Book.prototype._open = function() {
+		let bookWrapper = document.getElementById("book-viewer");
+
+		if (!bookWrapper) {
+			console.error("❌ book-viewer container is missing from the DOM!");
+			return;
+		} else {
+			console.log("✅ book-viewer found in DOM!");
+		}
+		// console.log("🚀 _open() function is running!");
+    
+		// // docscroll = scrollY();
+		
+		// // classie.add( this.el, 'open' );
+		// // classie.add( this.bbWrapper, 'show' );
+		
+		// let totalPages = 0;
+		// let pdfDoc = null;
+
+		if (typeof pdfjsLib === "undefined") {
+			console.error("❌ PDF.js is not loaded!");
+			return;
+		}
+
+		console.log("🚀 _open() function is running!");
+
+		let bookId = this.book.getAttribute("data-book");
+		console.log("📖 Book ID:", bookId);
+	
+		let pdfUrl = pdfFiles[bookId] || "books/htsg_lulu.pdf";
+		if (!pdfUrl) {
+			console.error(`❌ No PDF file found for book ID: ${bookId}`);
+			return;
+		}
+		console.log("📖 Loading PDF:", pdfUrl);
+
+		// let bookWrapper = document.getElementById("book-viewer"); // ✅ Single container
+		if (!bookWrapper) {
+			console.error("❌ Book viewer container not found!");
+			return;
+		}
+	
+		let bookPreview = bookWrapper.querySelector(".bb-bookblock");
+
+		if (!bookPreview) {
+			console.error("❌ .bb-bookblock is missing inside book-viewer!");
+			return;
+		} else {
+			console.log("✅ .bb-bookblock found inside book-viewer!");
+		}
+	
+		bookPreview.innerHTML = ""; // Clear previous pages
+
+		// let bookId = this.book.getAttribute("data-book");
+		// let pdfUrl = pdfFiles[bookId] || "books/htsg_lulu.pdf"; // Load the right PDF
+		// console.log("📖 Loading PDF:", pdfUrl);
+
+		// let bookWrapper = document.getElementById("book-viewer"); // ✅ New single container
+    	// let bookPreview = bookWrapper.querySelector(".bb-bookblock");
+			
+		// // Clear existing content (to avoid duplicate pages)
+		// bookPreview.innerHTML = "<div class='bb-item'>Loading page...</div>"; // Add temporary content
+
+		// bookWrapper.style.display = "block"; // ✅ Show the viewer when a book is opened
+
+		// ✅ Ensure the viewer is visible
+		// bookWrapper.style.display = "flex"; // ✅ Use flex for centering
+		// bookWrapper.style.justifyContent = "center";
+		// bookWrapper.style.alignItems = "center";
+
+		// bookWrapper.style.display = "flex"; 
+		// bookWrapper.style.position = "fixed"; 
+		// bookWrapper.style.top = "50%";
+		// bookWrapper.style.left = "50%";
+		// bookWrapper.style.transform = "translate(-50%, -50%)";
+		// bookWrapper.style.zIndex = "1000"; // Ensure it's on top
+		// bookWrapper.style.background = "#ffffff"; // Add background color
+		// bookWrapper.style.padding = "20px"; 
+		// console.log("✅ Forced book-viewer to appear!");
+    	// ✅ Ensure book-viewer is visible
+		bookWrapper.style.display = "block";
+		bookWrapper.style.visibility = "visible";
+		bookWrapper.style.opacity = "1";
+		bookWrapper.style.position = "fixed";
+		bookWrapper.style.top = "50%";
+		bookWrapper.style.left = "50%";
+		bookWrapper.style.transform = "translate(-50%, -50%)";
+		bookWrapper.style.zIndex = "9999";
+		bookWrapper.style.background = "#fff";
+		bookWrapper.style.padding = "20px";
+		console.log("✅ book-viewer made visible!");
+
+
+		// ✅ Ensure .bb-bookblock is also visible
+		let bookBlock = document.querySelector(".bb-bookblock");
+		if (bookBlock) {
+			bookBlock.style.display = "block";
+			bookBlock.style.visibility = "visible";
+			bookBlock.style.opacity = "1";
+			console.log("✅ .bb-bookblock is visible!");
+		} else {
+			console.error("❌ .bb-bookblock is missing!");
+		}
+
+		// ✅ Fix Next and Previous button event listeners
+		setTimeout(() => {
+			let nextButton = bookWrapper.querySelector(".bb-nav-next");
+			let prevButton = bookWrapper.querySelector(".bb-nav-prev");
+
+			if (nextButton) {
+				nextButton.replaceWith(nextButton.cloneNode(true)); // Remove duplicate events
+				nextButton = bookWrapper.querySelector(".bb-nav-next");
+				nextButton.addEventListener("click", function(ev) {
+					ev.preventDefault();
+					let step = currentPage === 1 ? 1 : 2;
+					if (currentPage + step <= totalPages) {
+						currentPage += step;
+						console.log(`➡️ Next Page: ${currentPage}`);
+						renderPage(currentPage);
+					}
+				});
+				console.log("✅ Fixed Next button event listener!");
+			} else {
+				console.error("❌ Next button NOT found!");
+			}
+
+			if (prevButton) {
+				prevButton.replaceWith(prevButton.cloneNode(true)); // Remove duplicate events
+				prevButton = bookWrapper.querySelector(".bb-nav-prev");
+				prevButton.addEventListener("click", function(ev) {
+					ev.preventDefault();
+					let step = currentPage === 3 ? 1 : 2;
+					if (currentPage - step >= 1) {
+						currentPage -= step;
+						console.log(`⬅️ Previous Page: ${currentPage}`);
+						renderPage(currentPage);
+					}
+				});
+				console.log("✅ Fixed Previous button event listener!");
+			} else {
+				console.error("❌ Previous button NOT found!");
+			}
+		}, 500); // Ensure the pop-up is fully visible before adding listeners
+
+		// pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+		console.log("📖 Attempting to load PDF:", pdfUrl);
+
+		// Load PDF dynamically
+		pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+			console.log("✅ PDF Loaded Successfully:", pdfUrl);
+			pdfDoc = pdf;
+			totalPages = pdf.numPages;
+			currentPage = 8; // Start from the first page
+			renderPage(currentPage);
+		}).catch(error => {
+			console.error("❌ PDF failed to load!", error);
+		});
+	
+
+		function renderPage(pageNumber) {
+			if (!pdfDoc) {
+				console.error("❌ PDF document is not loaded!");
+				return;
+			}
+			
+			console.log(`🛠 Attempting to render page: ${pageNumber}`);
+
+			let pagesToRender = [pageNumber]; // Start with the first page
+
+			if (pageNumber > 1 && pageNumber + 1 <= totalPages) {
+				pagesToRender.push(pageNumber + 1); // Add the next page for a two-page spread
+			}
+
+			let bookPreview = document.querySelector(".bb-bookblock"); // ✅ Correct container
+			if (!bookPreview) {
+				console.error("❌ Book preview container not found!");
+				return;
+			}
+
+			bookPreview.innerHTML = ""; // Clear previous pages
+
+			pdfDoc.getPage(pageNumber).then(page => {
+				let scale = 1.5;
+				let viewport = page.getViewport({ scale });
+		
+				let canvas = document.createElement("canvas");
+				let context = canvas.getContext("2d", { willReadFrequently: true });
+				canvas.width = viewport.width;
+				canvas.height = viewport.height;
+		
+				let renderContext = {
+					canvasContext: context,
+					viewport: viewport
+				};
+		
+				page.render(renderContext).promise.then(() => {
+					console.log(`✅ Page ${pageNumber} rendered successfully!`);
+					bookPreview.appendChild(canvas);
+				}).catch(error => {
+					console.error("❌ Error rendering page:", error);
+				});
+			}).catch(error => {
+				console.error("❌ Error fetching page:", error);
+			});
+			// // Create a container for the spread
+			// let spreadContainer = document.createElement("div");
+			// spreadContainer.style.display = "flex"; // Side-by-side layout
+			// spreadContainer.style.justifyContent = "center";
+			// spreadContainer.style.alignItems = "center";
+			// spreadContainer.style.gap = "10px"; // Space between pages
+			// spreadContainer.style.width = "100%";
+
+    		// bookPreview.appendChild(spreadContainer); // ✅ Ensure it’s added INSIDE `.bb-bookblock`
+			
+			// pagesToRender.forEach((pageNum) => {
+			// 	pdfDoc.getPage(pageNum).then(page => {
+			// 		let scale = 1.5;
+			// 		let viewport = page.getViewport({ scale: scale });
+		
+			// 		let canvas = document.createElement("canvas");
+			// 		let context = canvas.getContext("2d", { willReadFrequently: true });
+			// 		canvas.width = viewport.width;
+			// 		canvas.height = viewport.height;
+		
+			// 		let renderContext = {
+			// 			canvasContext: context,
+			// 			viewport: viewport
+			// 		};
+		
+			// 		page.render(renderContext).promise.then(() => {
+			// 			console.log(`✅ Page ${pageNum} rendered and added to spread.`);
+			// 			spreadContainer.appendChild(canvas);
+			// 		}).catch(error => {
+			// 			console.error("❌ Error rendering page:", error);
+			// 		});
+			// 	}).catch(error => {
+			// 		console.error("❌ Error fetching page:", error);
+			// 	});
+			// });
+		}
+	
+		window.addEventListener("load", function() {
+			let bookWrapper = document.getElementById("book-viewer");
+			let nextButton = bookWrapper.querySelector(".bb-nav-next");
+			let prevButton = bookWrapper.querySelector(".bb-nav-prev");
+		
+			nextButton.addEventListener("click", function(ev) {
+				ev.preventDefault();
+				let step = currentPage === 1 ? 1 : 2; // Move 1 page for first page, then 2 pages at a time
+				if (currentPage + step <= totalPages) {
+					currentPage += step;
+					console.log(`➡️ Next Page: ${currentPage}`);
+					renderPage(currentPage);
+				}
+			});
+			prevButton.addEventListener("click", function(ev) {
+				ev.preventDefault();
+				let step = currentPage === 3 ? 1 : 2; // If returning to page 1, move back 1 page only
+				if (currentPage - step >= 1) {
+					currentPage -= step;
+					console.log(`⬅️ Previous Page: ${currentPage}`);
+					renderPage(currentPage);
+				}
+			});
+		});
+
+		// ✅ Debug buttons
+		setTimeout(() => {
+			document.querySelectorAll("#book-viewer button, #book-viewer a").forEach(btn => {
+				btn.style.pointerEvents = "auto";
+				btn.style.zIndex = "10000"; // Bring above overlays
+				console.log("✅ Buttons made clickable!");
+			});
+		}, 500);
+			
+		// // Navigation buttons (find existing or create them if missing)
+		// let nextButton = this.bbWrapper.querySelector(".bb-nav-next");
+		// let prevButton = this.bbWrapper.querySelector(".bb-nav-prev");
+	
+		// if (!nextButton || !prevButton) {
+		// 	console.error("❌ Navigation buttons not found!");
+		// 	return;
+		// }
+	
+		// nextButton.addEventListener("click", function(ev) {
+		// 	ev.preventDefault();
+		// 	let step = currentPage === 1 ? 1 : 2; // Move 1 page for first page, then 2 pages at a time
+		// 	if (currentPage + step <= totalPages) {
+		// 		currentPage += step;
+		// 		console.log(`➡️ Next Page: ${currentPage}`);
+		// 		renderPage(currentPage);
+		// 	}
+		// });
+	
+		// prevButton.addEventListener("click", function(ev) {
+		// 	ev.preventDefault();
+		// 	let step = currentPage === 3 ? 1 : 2; // If returning to page 1, move back 1 page only
+		// 	if (currentPage - step >= 1) {
+		// 		currentPage -= step;
+		// 		console.log(`⬅️ Previous Page: ${currentPage}`);
+		// 		renderPage(currentPage);
+		// 	}
+		// });
+	}
+	
 	Book.prototype._layout = function() {
 		if( Modernizr.csstransforms3d ) {
 			this.book.innerHTML = '<div class="cover"><div class="front"></div><div class="inner inner-left"></div></div><div class="inner inner-right"></div>';
@@ -62,6 +371,16 @@
 	}
 
 	Book.prototype._initBookBlock = function() {
+		console.log("✅ Initializing bookblock...");
+
+		// Ensure .bb-bookblock exists before initializing
+		this.bbWrapper = document.querySelector(".bb-bookblock");
+		if (!this.bbWrapper) {
+			console.error("❌ .bb-bookblock does not exist! Retrying...");
+			setTimeout(() => this._initBookBlock(), 500); // Retry after delay
+			return;
+		}
+
 		// initialize bookblock instance
 		this.bb = new BookBlock( this.bbWrapper.querySelector( '.bb-bookblock' ), {
 			speed : 700,
@@ -69,17 +388,47 @@
 			shadowFlip : 0.4
 		} );
 		// boobkblock controls
+
+		console.log("✅ BookBlock initialized successfully!");
+
 		this.ctrlBBClose = this.bbWrapper.querySelector( ' .bb-nav-close' );
 		this.ctrlBBNext = this.bbWrapper.querySelector( ' .bb-nav-next' );
 		this.ctrlBBPrev = this.bbWrapper.querySelector( ' .bb-nav-prev' );
 	}
 
 	Book.prototype._initEvents = function() {
+		console.log("🔄 _initEvents() is running...");
+
 		var self = this;
 		if( !this.ctrls ) return;
 
+		let lookInsideBtn = this.ctrls.querySelector('a[href="#"]');
+
+		if (lookInsideBtn) {
+			console.log("✅ 'Look Inside' button found!");
+			lookInsideBtn.addEventListener("click", function(ev) {
+				ev.preventDefault();
+				console.log("🚀 Click event triggered!");
+				self._open();
+			});
+		} else {
+			console.error("❌ 'Look Inside' button NOT found!");
+		}
+
 		if( this.bb ) {
-			this.ctrls.querySelector( 'a:nth-child(1)' ).addEventListener( 'click', function( ev ) { ev.preventDefault(); self._open(); } );
+			// this.ctrls.querySelector( 'a:nth-child(1)' ).addEventListener( 'click', function( ev ) { ev.preventDefault(); self._open(); } );
+			// let lookInsideBtn = this.ctrls.querySelector('a[href="#"]');
+			// if (lookInsideBtn) {
+			// 	lookInsideBtn.addEventListener("click", function(ev) {
+			// 		ev.preventDefault();
+			// 		console.log("🚀 Click event permanently attached!");
+			// 		self._open();
+			// 	});
+			// } else {
+			// 	console.error("❌ Look Inside button not found at script runtime!");
+			// }
+			
+
 			this.ctrlBBClose.addEventListener( 'click', function( ev ) { ev.preventDefault(); self._close(); } );
 			this.ctrlBBNext.addEventListener( 'click', function( ev ) { ev.preventDefault(); self._nextPage(); } );
 			this.ctrlBBPrev.addEventListener( 'click', function( ev ) { ev.preventDefault(); self._prevPage(); } );
@@ -91,26 +440,26 @@
 		}
 	}
 
-	Book.prototype._open = function() {
-		docscroll = scrollY();
+	// Book.prototype._open = function() {
+	// 	docscroll = scrollY();
 		
-		classie.add( this.el, 'open' );
-		classie.add( this.bbWrapper, 'show' );
+	// 	classie.add( this.el, 'open' );
+	// 	classie.add( this.bbWrapper, 'show' );
 
-		var self = this,
-			onOpenBookEndFn = function( ev ) {
-				this.removeEventListener( animEndEventName, onOpenBookEndFn );
-				document.body.scrollTop = document.documentElement.scrollTop = 0;
-				classie.add( scrollWrap, 'hide-overflow' );
-			};
+	// 	var self = this,
+	// 		onOpenBookEndFn = function( ev ) {
+	// 			this.removeEventListener( animEndEventName, onOpenBookEndFn );
+	// 			document.body.scrollTop = document.documentElement.scrollTop = 0;
+	// 			classie.add( scrollWrap, 'hide-overflow' );
+	// 		};
 
-		if( supportAnimations ) {
-			this.bbWrapper.addEventListener( animEndEventName, onOpenBookEndFn );
-		}
-		else {
-			onOpenBookEndFn.call();
-		}
-	}
+	// 	if( supportAnimations ) {
+	// 		this.bbWrapper.addEventListener( animEndEventName, onOpenBookEndFn );
+	// 	}
+	// 	else {
+	// 		onOpenBookEndFn.call();
+	// 	}
+	// }
 
 	Book.prototype._close = function() {
 		classie.remove( scrollWrap, 'hide-overflow' );
@@ -153,10 +502,18 @@
 		classie.remove( this.el, 'details-open' );
 	}
 
+	// function init() {
+	// 	[].slice.call( books ).forEach( function( el ) {
+	// 		new Book( el );
+	// 	} );
+	// }
+
 	function init() {
-		[].slice.call( books ).forEach( function( el ) {
-			new Book( el );
-		} );
+		window.books = [].slice.call(books).map(function(el) {
+			let bookInstance = new Book(el);
+			console.log("📚 Created Book instance:", bookInstance);
+			return bookInstance;
+		});
 	}
 
 	init();
