@@ -122,6 +122,7 @@
 			let nextButton = bookWrapper.querySelector(".bb-nav-next");
 			let prevButton = bookWrapper.querySelector(".bb-nav-prev");
 			let closeButton = document.querySelector(".bb-nav-close");
+
 			if (closeButton) {
 				closeButton.addEventListener("click", function(ev) {
 					ev.preventDefault();
@@ -132,6 +133,7 @@
 			} else {
 				console.error("❌ Close button NOT found!");
 			}
+
 			if (nextButton) {
 				nextButton.replaceWith(nextButton.cloneNode(true)); // Remove duplicate events
 				nextButton = bookWrapper.querySelector(".bb-nav-next");
@@ -150,21 +152,26 @@
 			}
 
 			if (prevButton) {
-				prevButton.replaceWith(prevButton.cloneNode(true)); // Remove duplicate events
-				prevButton = bookWrapper.querySelector(".bb-nav-prev");
-				prevButton.addEventListener("click", function(ev) {
-					ev.preventDefault();
-					let step = currentPage === 3 ? 1 : 2;
-					if (currentPage - step >= 1) {
-						currentPage -= step;
-						console.log(`⬅️ Previous Page: ${currentPage}`);
-						renderPage(currentPage);
-					}
-				});
-				console.log("✅ Fixed Previous button event listener!");
-			} else {
-				console.error("❌ Previous button NOT found!");
-			}
+				prevButton.replaceWith(prevButton.cloneNode(true)); // Force remove old listeners
+            	prevButton = document.querySelector(".bb-nav-prev");
+            	prevButton.addEventListener("click", function(ev) {
+                ev.preventDefault();
+                console.log("⬅️ Back button clicked!");
+
+                if (currentPage <= 2) {
+                    currentPage = 1;
+                    console.log("⬅️ Returning to cover page (cover1.png)!");
+                    renderPage(currentPage);
+                } else {
+                    let step = 2;
+                    if (currentPage - step >= 1) {
+                        currentPage -= step;
+                        console.log(`⬅️ Previous Pages: ${currentPage} & ${currentPage + 1}`);
+                        renderPage(currentPage);
+                    }
+                }
+			});
+		}
 		}, 500); // Ensure the pop-up is fully visible before adding listeners
 
 		// pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
@@ -183,15 +190,10 @@
 	
 
 		function renderPage(pageNumber) {
-			console.log(`🛠 Rendering pages ${pageNumber} and ${pageNumber + 1}...`);
-
 			if (!pdfDoc) {
 				console.error("❌ PDF document is not loaded!");
 				return;
 			}
-			
-			console.log(`🛠 Attempting to render page: ${pageNumber}`);
-
 			let bookPreview = document.querySelector(".bb-bookblock"); // ✅ Correct container
 			if (!bookPreview) {
 				console.error("❌ Book preview container not found!");
@@ -207,18 +209,30 @@
 			spreadContainer.style.alignItems = "center";
 			spreadContainer.style.gap = "10px"; // Space between pages
 			spreadContainer.style.width = "100%";
-
     		bookPreview.appendChild(spreadContainer); // ✅ Ensure it’s added INSIDE `.bb-bookblock`
 			
+			// ✅ Display cover image if it's the first page
+			if (pageNumber === 1) {
+				let coverImage = document.createElement("img");
+				coverImage.src = "img/cover1.png"; // 🔹 Replace with your actual path
+				coverImage.alt = "Book Cover";
+				coverImage.style.maxWidth = "60%";
+				coverImage.style.maxHeight = "60%";
+				coverImage.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.2)";
+				spreadContainer.appendChild(coverImage);
+				console.log("✅ Cover image displayed instead of Page 1.");
+				return; // Exit so it doesn't try to render the PDF
+			}
+
 			 // ✅ Ensure pages render side by side
 			let pagesToRender = [pageNumber]; // Always render at least one page
 			if (pageNumber + 1 <= totalPages) {
-				pagesToRender.push(pageNumber + 1); // Add the next page for a two-page spread
+				pagesToRender.push(pageNumber + 1); // Add the next page for spreads (except first)
 			}
 		
 			pagesToRender.forEach((pageNum) => {
 				pdfDoc.getPage(pageNum).then(page => {
-					let scale = 2;
+					let scale = 1.3;
 					let viewport = page.getViewport({ scale });
 		
 					let canvas = document.createElement("canvas");
@@ -260,11 +274,20 @@
 			});
 			prevButton.addEventListener("click", function(ev) {
 				ev.preventDefault();
-				let step = currentPage === 3 ? 1 : 2; // If returning to page 1, move back 1 page only
-				if (currentPage - step >= 1) {
-					currentPage -= step;
-					console.log(`⬅️ Previous Page: ${currentPage}`);
+				console.log(`⬅️ Attempting to navigate from Page ${currentPage}`);
+
+				if (currentPage === 2) {
+					// ✅ Special case: If on pages 2 & 3, go back to cover (Page 1)
+					currentPage = 1;
+					console.log("⬅️ Returning to cover page!");
 					renderPage(currentPage);
+				} else {
+					let step = 2; // Move back 2 pages for all other spreads
+					if (currentPage - step >= 1) {
+						currentPage -= step;
+						console.log(`⬅️ Previous Pages: ${currentPage} & ${currentPage + 1}`);
+						renderPage(currentPage);
+					}
 				}
 			});
 		});
@@ -352,7 +375,7 @@
 			this.closeDetailsCtrl.addEventListener( 'click', function() { self._hideDetails(); } );
 		}
 	}
-	
+
 	Book.prototype._close = function() {
 		classie.remove( scrollWrap, 'hide-overflow' );
 		setTimeout( function() { document.body.scrollTop = document.documentElement.scrollTop = docscroll; }, 25 );
