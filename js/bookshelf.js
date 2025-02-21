@@ -46,7 +46,7 @@
 		this._initEvents();
 	}
 	let pdfFiles = {
-		"book-1": "books/htsg_lulu_new.pdf",
+		"book-1": "books/htsg_lulu.pdf",
 		// "book-2": "books/another-book.pdf"
 	};
 
