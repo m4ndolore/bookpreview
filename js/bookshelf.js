@@ -46,7 +46,7 @@
 		this._initEvents();
 	}
 	let pdfFiles = {
-		"book-1": "books/htsg_lulu.pdf",
+		"book-1": "books/_web.pdf",
 		// "book-2": "books/another-book.pdf"
 	};
 
@@ -70,7 +70,7 @@
 		let bookId = this.book.getAttribute("data-book");
 		console.log("📖 Book ID:", bookId);
 	
-		let pdfUrl = pdfFiles[bookId] || "books/htsg_lulu.pdf";
+		let pdfUrl = pdfFiles[bookId] || "books/htsg_lulu_web.pdf";
 		if (!pdfUrl) {
 			console.error(`❌ No PDF file found for book ID: ${bookId}`);
 			return;
