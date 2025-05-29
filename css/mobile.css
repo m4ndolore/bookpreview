@@ -1,6 +1,37 @@
-/* Mobile-Friendly Enhancements - Add this to your existing CSS or create mobile.css */
+/* Complete Dark Theme with #04070D Background - Mobile-Friendly CSS */
 
-/* Enhanced Button Styling for Mobile */
+/* Base Dark Theme */
+body {
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #04070D 0%, #0a0f1a 100%);
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+}
+
+.embed-container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Enhanced Button Styling for Mobile with Dark Theme */
+.bookshelf {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bookshelf figure {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0;
+}
+
 .bookshelf .buttons {
     display: flex;
     gap: 12px;
@@ -11,15 +42,16 @@
 
 .bookshelf .buttons a {
     /* Larger touch targets for mobile */
-    min-height: 48px; /* Apple's recommended minimum touch target */
+    min-height: 48px;
     min-width: 120px;
     padding: 12px 20px;
     
-    /* Better visual styling */
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    /* Dark theme styling */
+    background: linear-gradient(135deg, #1a1f3a 0%, #2d1b69 100%);
+    color: #ffffff;
     text-decoration: none;
     border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     
     /* Typography improvements */
     font-size: 16px;
@@ -28,29 +60,60 @@
     line-height: 1.2;
     
     /* Interactive effects */
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 12px rgba(26, 31, 58, 0.4);
     
     /* Flex for centering text */
     display: flex;
     align-items: center;
     justify-content: center;
+    
+    /* Prevent text selection and callouts */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .bookshelf .buttons a:hover,
 .bookshelf .buttons a:focus {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    box-shadow: 0 4px 16px rgba(26, 31, 58, 0.6);
+    background: linear-gradient(135deg, #242952 0%, #3d2177 100%);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .bookshelf .buttons a:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 2px 8px rgba(26, 31, 58, 0.4);
+}
+
+/* Dark Theme Typography */
+.bookshelf figcaption h2 {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 15px 0 5px 0;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.bookshelf figcaption h2 span {
+    display: block;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 4px;
 }
 
 /* Mobile-specific adjustments */
 @media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
     .bookshelf .buttons {
         flex-direction: column;
         align-items: center;
@@ -60,40 +123,33 @@
     .bookshelf .buttons a {
         width: 100%;
         max-width: 280px;
-        min-height: 52px; /* Slightly larger on mobile */
+        min-height: 52px;
         font-size: 18px;
     }
     
-    /* Make the entire book figure more touch-friendly */
     .bookshelf figure {
         padding: 20px;
         max-width: 320px;
         margin: 0 auto;
     }
     
-    /* Adjust book title for mobile */
     .bookshelf figcaption h2 {
         font-size: 18px;
-        line-height: 1.3;
-        text-align: center;
     }
     
     .bookshelf figcaption h2 span {
-        display: block;
         font-size: 14px;
-        margin-top: 4px;
-        opacity: 0.8;
     }
 }
 
-/* Enhanced PDF Popup for Mobile */
+/* Enhanced PDF Popup with Dark Theme */
 .bb-custom-wrapper {
     position: fixed !important;
     top: 0;
     left: 0;
     width: 100vw !important;
     height: 100vh !important;
-    background: rgba(0, 0, 0, 0.95);
+    background: #04070D;
     z-index: 9999;
     
     /* Better mobile experience */
@@ -103,20 +159,22 @@
 
 .bb-bookblock {
     width: 100% !important;
-    height: calc(100vh - 60px) !important; /* Leave space for navigation */
+    height: calc(100vh - 60px) !important;
     margin: 0 !important;
     position: relative;
+    background: #04070D;
 }
 
-/* Enhanced Navigation for Mobile */
+/* Dark Theme Navigation Bar */
 .bb-custom-wrapper nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     height: 60px;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(4, 7, 13, 0.95);
     backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     
     display: flex;
     justify-content: center;
@@ -131,13 +189,13 @@
     display: none;
 }
 
-/* Style only the close button in bottom nav */
+/* Enhanced Close Button */
 .bb-custom-wrapper nav .bb-nav-close {
     min-height: 44px;
     min-width: 120px;
     padding: 8px 24px;
     
-    background: rgba(220, 53, 69, 0.8);
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: white;
     text-decoration: none;
     border-radius: 6px;
@@ -152,20 +210,24 @@
     justify-content: center;
     
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
 }
 
 .bb-nav-close:hover,
 .bb-nav-close:focus {
-    background: rgba(220, 53, 69, 1) !important;
+    background: linear-gradient(135deg, #e04555 0%, #d02543 100%) !important;
     border-color: rgba(220, 53, 69, 1) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
 }
 
 .bb-nav-close:active {
-    background: rgba(200, 33, 49, 1) !important;
+    background: linear-gradient(135deg, #c82333 0%, #b01e2f 100%) !important;
     transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
 }
 
-/* Center-positioned Previous/Next buttons */
+/* Center-positioned Previous/Next buttons with Dark Theme */
 .bb-nav-prev,
 .bb-nav-next {
     position: fixed !important;
@@ -177,7 +239,7 @@
     height: 60px !important;
     border-radius: 50% !important;
     
-    background: rgba(0, 0, 0, 0.7) !important;
+    background: rgba(4, 7, 13, 0.9) !important;
     color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3) !important;
     
@@ -189,8 +251,9 @@
     font-weight: bold !important;
     text-decoration: none !important;
     
-    transition: all 0.3s ease !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .bb-nav-prev {
@@ -205,14 +268,16 @@
 .bb-nav-next:hover,
 .bb-nav-prev:focus,
 .bb-nav-next:focus {
-    background: rgba(0, 0, 0, 0.9) !important;
+    background: rgba(4, 7, 13, 0.95) !important;
     border-color: rgba(255, 255, 255, 0.6) !important;
     transform: translateY(-50%) scale(1.1) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
 }
 
 .bb-nav-prev:active,
 .bb-nav-next:active {
     transform: translateY(-50%) scale(0.95) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Add arrow symbols for better UX */
@@ -265,14 +330,14 @@
         right: 15px !important;
     }
     
-    /* Add swipe hint */
+    /* Dark themed swipe hint */
     .bb-bookblock::after {
         content: "Swipe or tap arrows to navigate";
         position: absolute;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(4, 7, 13, 0.9);
         color: white;
         padding: 8px 16px;
         border-radius: 20px;
@@ -281,6 +346,8 @@
         animation: fadeOut 4s ease-in-out forwards;
         max-width: 80%;
         text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
     }
     
     @keyframes fadeOut {
@@ -289,13 +356,13 @@
     }
 }
 
-/* Touch-friendly details section */
+/* Dark Theme Details Section */
 .bookshelf .details {
     margin-top: 15px;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.02);
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .bookshelf .details ul {
@@ -306,18 +373,95 @@
 
 .bookshelf .details ul li {
     padding: 8px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 14px;
     line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .bookshelf .details ul li:last-child {
     border-bottom: none;
 }
 
+.bookshelf .details ul li:first-child {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+}
+
 @media (max-width: 768px) {
     .bookshelf .details ul li {
-        font-size: 16px; /* Larger text for mobile readability */
+        font-size: 16px;
         padding: 10px 0;
     }
+}
+
+/* Dark Theme Loading States */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* PDF Loading Indicator with Dark Theme */
+.pdf-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(4, 7, 13, 0.95);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 10001;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.pdf-loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+/* Ensure the bookshelf component displays properly in isolation */
+#bookshelf {
+    width: 100%;
+}
+
+/* Override any styles that might interfere with embedding */
+.bb-custom-wrapper {
+    position: fixed !important;
+    z-index: 9999 !important;
 }
