@@ -1,104 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Viewer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: transparent;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .pdf-embed-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-        }
-        
-        .pdf-viewer {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
-        }
-        
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            color: #6c757d;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e9ecef;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-text {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        /* Hide loading when iframe loads */
-        .pdf-viewer:not([data-loading="true"]) + .loading-spinner {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="pdf-embed-container">
-        <iframe 
-            id="pdfViewer"
-            class="pdf-viewer"
-            src="https://gch.m4ndo.com/"
-            title="PDF Viewer"
-            data-loading="true">
-        </iframe>
-        
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <div class="loading-text">Loading PDF...</div>
-        </div>
-    </div>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>m4ndo for hire</title>
+		<meta name="description" content="m4ndo />
+		<meta name="keywords" content="We are stronger together. This is the way." />
+		<meta name="author" content="Gu$" />
+		<link rel="shortcut icon" href="../img/mando.jpeg">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/bookblock.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<link rel="stylesheet" type="text/css" href="css/scratchpad.css" />
+        <link rel="stylesheet" type="text/css" href="css/mobile.css" />
+		<script src="js/modernizr.custom.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-    <script>
-        // Handle iframe loading
-        const iframe = document.getElementById('pdfViewer');
-        const loadingSpinner = document.querySelector('.loading-spinner');
+	</head>
+	<body>
+		<div id="scroll-wrap" class="container">
+			<div class="main">
+
         
-        iframe.addEventListener('load', function() {
-            iframe.removeAttribute('data-loading');
-            loadingSpinner.style.display = 'none';
-        });
-        
-        // Fallback: hide loading after 5 seconds regardless
-        setTimeout(() => {
-            iframe.removeAttribute('data-loading');
-            loadingSpinner.style.display = 'none';
-        }, 5000);
-    </script>
-</body>
+				<div id="bookshelf" class="bookshelf">
+					<figure>
+						<div class="book" data-book="book-1"></div>
+						<div class="buttons"><a href="#">Look inside</a><a href="#">Details</a></div>
+						<figcaption><h2>Valley of Death Survival Guide <span>John Ferry</span></h2></figcaption>
+						<div class="details">
+							<ul>
+								<li>Building technology for the US Government is hard. How do you know what really matters? How do you navigate the maze of red tape and bureaucracy? How do you reach the right audience, the ones with expertise, authority, and drive to implement your solution effectively?</li>
+								<li>UseRogue</li>
+								<li>02.01.2025</li>
+								<li>338 pages</li>
+							</ul>
+						</div>
+					</figure>
+				</div>
+			</div><!-- /main -->
+		</div><!-- /container -->
+
+		<!-- Fullscreen BookBlock -->
+		<!-- for demo purpose we repeat each bookblock -->
+		<div class="bb-custom-wrapper" id="book-viewer">
+			<div class="bb-bookblock"></div> <!-- PDF pages will be dynamically inserted here -->
+			<nav>
+				<a href="#" class="bb-nav-prev">Previous</a>
+				<a href="#" class="bb-nav-next">Next</a>
+				<a href="#" class="bb-nav-close">Close</a>
+			</nav>
+		</div>	
+		<script src="js/bookblock.min.js"></script>
+		<script src="js/classie.js"></script>
+		<script src="js/bookshelf.js"></script>
+        <script src="js/mobile.js"></script>
+
+	</body>
 </html>
